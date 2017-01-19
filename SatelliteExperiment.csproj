@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFrameworks>netcoreapp1.0;net46</TargetFrameworks>
+    <EnableDefaultItems>false</EnableDefaultItems>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <RuntimeIdentifiers>win7-x86</RuntimeIdentifiers>
+    <RuntimeIdentifier Condition="'$(TargetFramework)' == 'net46'">win7-x86</RuntimeIdentifier>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Strings.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Strings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net46'">
+     <!-- Build desktop satellite (will use AL.exe if built using desktop msbuild) -->
+    <EmbeddedResource Include="Strings.fr.resx" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp1.0'">
+    <!-- Copy desktop satellite to netcoreapp as proof of concept -->
+    <Content Include="$(OutDir)..\net46\**\*.resources.dll">
+      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+</Project>
